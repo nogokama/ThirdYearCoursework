@@ -1,0 +1,122 @@
+% Это основная команда, с которой начинается любой \LaTeX-файл. Она отвечает за тип документа, с которым связаны основные правил оформления текста.
+\documentclass{article}[a4paper, 14pt]
+
+% Здесь идет преамбула документа, тут пишутся команды, которые настраивают LaTeX окружение, подключаете внешние пакеты, определяете свои команды и окружения. В данном случае я это делаю в отдельных файлах, а тут подключаю эти файлы.
+
+% Здесь я подключаю разные стилевые пакеты. Например возможности набирать особые символы или возможность компилировать русский текст. Подробное описание внутри.
+\usepackage{packages}
+
+% Здесь я определяю разные окружения, например, теоремы, определения, замечания и так далее. У этих окружений разные стили оформления, кроме того, эти окружения могут быть нумерованными или нет. Все подробно объяснено внутри.
+\usepackage{environments}
+
+% Здесь я определяю разные команды, которых нет в LaTeX, но мне нужны, например, команда \tr для обозначения следа матрицы. Или я переопределяю LaTeX команды, которые работают не так, как мне хотелось бы. Типичный пример мнимая и вещественная часть комплексного числа \Im, \Re. В оригинале они выглядят не так, как мы привыкли. Кроме того, \Im еще используется и для обозначения образа линейного отображения. Подробнее описано внутри.
+\usepackage{commands}
+
+% Пакет для титульника проекта
+\usepackage{titlepage}
+
+% Пакеты для отображения картинок
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{wrapfig}
+
+%
+%\usepackage[unicode=true, colorlinks=true, linkcolor=blue, urlcolor=blue]{hyperref}
+
+
+% Здесь задаем параметры титульной страницы
+\setUDK{192.168.1.1}
+% Выбрать одно из двух
+%\setToResearch
+%\setToProgram
+\setToPractice
+
+\setTitle{Мобильное приложение для отслеживания привычек}
+
+
+\setStageOne
+
+%сюда можно воткнуть картинку подписи
+\setStudentSgn{}
+
+\providecommand{\studentCompleted}{Выполнил студент}
+\providecommand{\student}{TestStudent}
+\providecommand{\group}{404}
+
+\setStudent{\student}
+\setGroup{\group}
+
+\setStudentDate{20.10.2022}
+\setAdvisor{Колесниченко Елена Юрьевна}
+\setAdvisorTitle{департамент больших данных и информационного поиска ФКН ВШЭ, доцент}
+\setAdvisorAffiliation{ООО <<Яндекс. Технологии>>}
+\setAdvisorDate{24.10.2022}
+\setGrade{--}
+%сюда можно воткнуть картинку подписи
+% \setAdvisorSgn{\scalebox{0.4}{\includegraphics{Utils/advisor_sign}}}
+\setYear{2022}
+
+\setStudentCompleted{\studentCompleted}
+
+\linespread{1.2}
+\urlstyle{same}
+
+\bibliographystyle{Bibliography/gost-numeric.bbx}
+\usepackage[parentracker=true,
+backend=biber,
+hyperref=true,
+bibencoding=utf8,
+language=auto,
+autolang=other,
+citestyle=gost-numeric,
+defernumbers=true,
+bibstyle=gost-numeric,
+sorting=ntvy,
+maxbibnames=99,
+]{biblatex}
+
+\addbibresource{Bibliography/sources.bib}
+
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{10pt}
+
+% С этого момента начинается текст документа
+\begin{document}
+
+% Эта команда создает титульную страницу
+% \makeTitlePage
+
+\newpage 
+
+
+\vspace*{\fill}
+
+\begin{center}
+    \huge
+    План выполнения курсовой работы по теме \\
+    <<Реализация поддержки асинхронного программирования для фреймворка DSLab>>
+\end{center}
+    
+\vspace*{\fill}
+
+\newpage
+
+% Здесь будет автоматически генерироваться содержание документа
+\tableofcontents
+
+
+\newpage
+\input{Parts/plan}
+
+\newpage
+\addcontentsline{toc}{section}{Список литературы}
+\printbibliography
+
+% \addcontentsline{toc}{section}{Список иллюстраций}
+% \listoffigures
+
+
+
+
+\end{document}
+% Начиная с этого момента весь текст LaTeX игнорирует, можете вставлять любую абракадабру.

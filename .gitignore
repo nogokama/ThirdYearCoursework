@@ -1,0 +1,15 @@
+*.out
+*.log 
+*.pdf
+*.aux
+*.gz
+*.fdb_latexmk
+*.fls
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+*.toc
+*.lof
+.DS_Store
+.vscode
