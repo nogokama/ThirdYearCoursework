@@ -59,7 +59,9 @@
 \setStudentCompleted{\studentCompleted}
 
 \linespread{1.2}
-\urlstyle{same}
+
+\usepackage[breaklinks, unicode=true, colorlinks=true, linkcolor=blue, urlcolor=blue,citecolor=blue]{hyperref}
+\usepackage{xurl}
 
 \bibliographystyle{Bibliography/gost-numeric.bbx}
 \usepackage[parentracker=true,
@@ -75,10 +77,14 @@ sorting=ntvy,
 maxbibnames=99,
 ]{biblatex}
 
+\setcounter{biburllcpenalty}{7000}
+\setcounter{biburlucpenalty}{8000}
+
 \addbibresource{Bibliography/sources.bib}
 
 \setlength{\parskip}{6pt}
 \setlength{\parindent}{10pt}
+
 
 % С этого момента начинается текст документа
 \begin{document}
@@ -110,14 +116,14 @@ maxbibnames=99,
 
 \newpage
 \addcontentsline{toc}{section}{Список литературы}
+
+\Urlmuskip=0mu plus 1mu\relax
+
 \printbibliography
 
 % \addcontentsline{toc}{section}{Список иллюстраций}
 % \listoffigures
 
-Требования к DSLab, документация https://docs.google.com/document/d/1CprULnQiVSWTXiBkx90CSEi4tgkUhM3R6VeCp1CsRwo/edit
-Crate futures https://crates.io/crates/futures
-rust async book https://rust-lang.github.io/async-book/
 
 \end{document}
 % Начиная с этого момента весь текст LaTeX игнорирует, можете вставлять любую абракадабру.
