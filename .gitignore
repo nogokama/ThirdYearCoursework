@@ -14,3 +14,4 @@
 .DS_Store
 .vscode
 *.pyg
+!kt1_titlepage.pdf

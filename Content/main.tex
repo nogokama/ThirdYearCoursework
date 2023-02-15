@@ -28,8 +28,8 @@
 \setUDK{192.168.1.1}
 % Выбрать одно из двух
 %\setToResearch
-%\setToProgram
-\setToPractice
+\setToProgram
+%\setToPractice
 
 \setTitle{Мобильное приложение для отслеживания привычек}
 
@@ -40,21 +40,21 @@
 \setStudentSgn{}
 
 \providecommand{\studentCompleted}{Выполнил студент}
-\providecommand{\student}{TestStudent}
-\providecommand{\group}{404}
+\providecommand{\student}{Макогон Артём}
+\providecommand{\group}{206}
 
 \setStudent{\student}
 \setGroup{\group}
 
-\setStudentDate{20.10.2022}
-\setAdvisor{Колесниченко Елена Юрьевна}
+\setStudentDate{15.02.2023}
+\setAdvisor{Сухорослов Олег Викторович}
 \setAdvisorTitle{департамент больших данных и информационного поиска ФКН ВШЭ, доцент}
 \setAdvisorAffiliation{ООО <<Яндекс. Технологии>>}
-\setAdvisorDate{24.10.2022}
+\setAdvisorDate{15.02.2023}
 \setGrade{--}
 %сюда можно воткнуть картинку подписи
 % \setAdvisorSgn{\scalebox{0.4}{\includegraphics{Utils/advisor_sign}}}
-\setYear{2022}
+\setYear{2023}
 
 \setStudentCompleted{\studentCompleted}
 
@@ -86,27 +86,30 @@ maxbibnames=99,
 \setlength{\parskip}{6pt}
 \setlength{\parindent}{10pt}
 
+\usepackage{pdfpages}
 
 % С этого момента начинается текст документа
 \begin{document}
+\includepdf[pages=-]{Parts/kt1_titlepage.pdf}
 
 % Эта команда создает титульную страницу
+
 % \makeTitlePage
 
-\newpage 
+% \newpage 
 
 
-\vspace*{\fill}
+% \vspace*{\fill}
 
-\begin{center}
-    \huge
-    План выполнения курсовой работы по теме \\
-    <<Реализация поддержки асинхронного программирования для фреймворка DSLab>>
-\end{center}
+% \begin{center}
+%     \huge
+%     План выполнения курсовой работы по теме \\
+%     <<Реализация поддержки асинхронного программирования для фреймворка DSLab>>
+% \end{center}
     
-\vspace*{\fill}
+% \vspace*{\fill}
 
-\newpage
+% \newpage
 
 % Здесь будет автоматически генерироваться содержание документа
 \tableofcontents
