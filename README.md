@@ -1,3 +1,3 @@
-## План. 
+## Промежуточный отчет. 
 
-[План](https://makogon2907.github.io/ThirdYearCoursework/Makogon.pdf)
+[Промежуточный отчет](https://makogon2907.github.io/ThirdYearCoursework/Makogon.pdf)
