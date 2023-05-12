@@ -1,7 +1,10 @@
 version: "3.9"
 services:
   pdf_build:
-    build: .
-    image: nogokama/pdflatexbuilder
+    build:
+      context: .
+      cache_from:
+        - nogokama/pdflatexbuilder:latest
+    image: nogokama/pdflatexbuilder:latest
     container_name: pdfbuilder
     command: build.sh
