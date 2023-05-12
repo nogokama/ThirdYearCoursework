@@ -87,7 +87,7 @@ DSLab - программный фреймворк для имитационно�
 Это повысит читаемость кода. Процесс принятия решения о сохранении файла в распределенном хранилище в такой парадигме мог бы выглядеть таким образом (псевдокод):
 
 \begin{figure}[H]
-\begin{lstlisting}[language=Python]
+\begin{rustcode}
     async fn add_file_to_storage(some_file) {
         send_file_to_all_replicas(some_file);
         result = wait_for_confirmation_from_all().await;
@@ -99,7 +99,7 @@ DSLab - программный фреймворк для имитационно�
             send_reject_message_to_user();
         }
     }
-\end{lstlisting}
+\end{rustcode}
 \caption{Псевдокод асинхронного взаимодействия нод в симуляции}
 \label{pseudocode}
 \end{figure}
@@ -132,7 +132,7 @@ DSLab - программный фреймворк для имитационно�
     \centering
     \begin{subfigure}[b]{0.45\linewidth}
         \centering
-        \begin{lstlisting}[language=Python]
+        \begin{rustcode}
 fn on_start_action(&self) {
     // do 1
 }
@@ -142,14 +142,14 @@ fn on_first_event(&self) {
 fn on_second_event(&self) {
     // do 3
 }
-    \end{lstlisting}
+    \end{rustcode}
         \caption{Синхронный код (разрезан на части разработчиком)}
         \label{sync-async-example:sync}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.45\linewidth}
+    \begin{subfigure}[b]{0.51\linewidth}
         \centering
-        \begin{lstlisting}[language=Python]
+        \begin{rustcode}
 async fn action(&self) {
     // do 1
     wait_for_first_event().await;
@@ -157,7 +157,7 @@ async fn action(&self) {
     wait_for_second_event().await;
     // do 3
 }
-    \end{lstlisting}
+    \end{rustcode}
         \caption{Асинхронный код (разрезан на части компилятором)}
         \label{sync-async-example:async}
     \end{subfigure}
@@ -257,7 +257,7 @@ async fn action(&self) {
 
 Возвращаясь к примеру: при отправке запроса на передачу данных мы можем возвращать пользователю идентификатор этой передачи (за которым следит компонент сети), и поскольку в сообщении \texttt{DataTransferCompleted} тоже будет присутствовать этот идентификатор, мы можем добавить его как подробности для ожидания. Получится примерно такое использование: 
 \begin{figure}[H]
-\begin{lstlisting}[language=Python]
+\begin{rustcode}
     async fn process_data_transfer_request(&self, request: Request) {
         let request_id = self.network.send(request);
         async_detailed_handle_event::<DataTransferCompleted>(
@@ -265,7 +265,7 @@ async fn action(&self) {
             request_id,
         ).await;
     }
-\end{lstlisting}
+\end{rustcode}
 \caption{Псевдокод асинхронного ожидания детализированного события}
 \label{async-detailed-pseudocode}
 \end{figure}
@@ -360,6 +360,8 @@ async fn action(&self) {
     \item \small \texttt{dslab-core = \{ path = "../../crates/dslab-core", features = ["async\_core"] \} } -- поддерживается весь \hyperref[interface]{интерфейс}, кроме функций детализированного ожидания. 
     \item \small \texttt{dslab-core = \{ path = "../../crates/dslab-core", features = ["async\_details\_core"] \}} -- поддерживается весь функционал API. Производительность снижена относительно стандартного \texttt{dslab-core}.
 \end{itemize}
+
+Одну из этих трех возможностей нужно добавлять в \texttt{Cargo.toml} файл соответствующего модуля (или исполняемого примера).
 
 \subsection{Замеры на схожих примерах}
 

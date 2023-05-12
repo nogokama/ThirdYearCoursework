@@ -1,0 +1,54 @@
+\usepackage{listings}
+
+\lstdefinelanguage{Rust}{
+  sensitive=true,
+  morekeywords=[1]{
+    break, continue, else, for, if, loop, match, return, while,
+  },
+  morekeywords=[2]{
+    crate, fn, async, mod, pub, use, self, Self,
+    struct, enum, const, static, let, mut, ref, type, impl,
+    trait, where, as, dyn, move,
+  },
+  morekeywords=[3]{
+    bool, char, i8, i16, i32, i64, isize, u8, u16, u32, u64, usize, f32, f64, str, String,
+  },
+  morekeywords=[4]{
+    Ok, Err, Some, None,
+  },
+  morekeywords=[5]{
+    await,
+  },
+  keywordstyle=[5]{\color{purple}},
+  morecomment=[s]{/*}{*/},
+  morecomment=[l]//,
+  morestring=[b]",
+  morestring=[b]r",
+  morestring=[b]'',
+}
+
+\lstset{
+  language=Rust,
+  basicstyle=\ttfamily,
+  keywordstyle=\color{blue},
+  stringstyle=\color{red},
+  commentstyle=\color{green},
+  showstringspaces=false,
+  breaklines=true,
+  frame=none,
+}
+
+
+\lstnewenvironment{rustcode}[1][]{
+  \lstset{
+    language=Rust,
+    basicstyle=\ttfamily,
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    commentstyle=\color{gray},
+    showstringspaces=false,
+    breaklines=true,
+    % frame=single,
+    #1
+  }
+}{}
