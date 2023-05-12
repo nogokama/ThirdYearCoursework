@@ -1,6 +1,10 @@
 FROM debian:10.1
 
-RUN apt update && apt install --yes  \
+WORKDIR /latex 
+
+RUN \ 
+    # --mount=type=cache,target=/cache \ 
+    apt update && apt install --yes  \
     git \
     build-essential \
     texlive-fonts-recommended \
@@ -11,19 +15,12 @@ RUN apt update && apt install --yes  \
     texlive-latex-recommended \
     texlive-base \
     texlive-science \
-    cm-super 
-
-RUN apt install --yes \
+    cm-super \
     texlive-generic-extra \
     texlive-lang-cyrillic \
     texlive-bibtex-extra \
     biber
 
-COPY Content/Bibliography /Content/Bibliography
-COPY Content/Parts /Content/Parts
-COPY Content/*.tex /Content/
-COPY Content/*.sty /Content/
+COPY . .
 
-COPY build.sh /build.sh
-
-CMD ["/bin/bash", "build.sh"]
+ENTRYPOINT ["/bin/bash"]

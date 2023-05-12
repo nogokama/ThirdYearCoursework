@@ -19,11 +19,21 @@ jobs:
         ref: 'gh_pages'
         path: '_gh_pages'
 
-    - name: Build article
-      uses: ./
+    - name: Cache Docker images
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.docker
+          ./docker-compose.yml
+        key: ${{ runner.os }}-compose-${{ hashFiles('docker-compose.yml') }}
 
     - name: Give permissions
-      run: chmod +x publish.sh
-      
+      run: | 
+        chmod +x publish.sh
+        chmod +x docker_build.sh
+
+    - name: Build article
+      run: ./docker_build.sh
+
     - name: Publish
       run: ./publish.sh
