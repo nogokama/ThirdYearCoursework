@@ -19,13 +19,10 @@ jobs:
         ref: 'gh_pages'
         path: '_gh_pages'
 
-    - name: Cache Docker images
-      uses: actions/cache@v3
+    - name: Cache Docker images.
+      uses: ScribeMD/docker-cache@0.3.3
       with:
-        path: |
-          ~/.docker
-          ./docker-compose.yml
-        key: ${{ runner.os }}-compose-${{ hashFiles('docker-compose.yml') }}
+        key: docker-${{ runner.os }}-${{ hashFiles('docker-compose.yaml') }}
 
     - name: Give permissions
       run: | 
