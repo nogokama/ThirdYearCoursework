@@ -1,6 +1,7 @@
 *.out
 *.log 
 *.pdf
+!Content/images/*.pdf
 *.aux
 *.gz
 *.fdb_latexmk
