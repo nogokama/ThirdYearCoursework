@@ -7,6 +7,8 @@
 *.fdb_latexmk
 *.fls
 *.bbl
+*.nav
+*.snm
 *.bcf
 *.blg
 *.run.xml

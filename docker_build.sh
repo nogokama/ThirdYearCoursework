@@ -1,2 +1,2 @@
 docker-compose build && docker-compose up
-docker cp pdfbuilder:/Makogon.pdf .
+docker cp pdfbuilder:/pdfoutput . && cp -r pdfoutput/*.pdf .

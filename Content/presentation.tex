@@ -1,0 +1,121 @@
+%!TEX TS-program = xelatex
+
+\documentclass[t]{beamer}  % [t], [c], или [b] --- вертикальное выравнивание на слайдах (верх, центр, низ)
+%\documentclass[t, handout]{beamer} % Раздаточный материал (на слайдах всё сразу)
+%\documentclass[aspectratio=169, t]{beamer} % Соотношение сторон
+
+\usepackage{epstopdf}
+
+%\usetheme{Berkeley} % Тема оформления
+%\usetheme{Bergen}
+%\usetheme{Szeged}
+
+%\usecolortheme{beaver} % Цветовая схема
+%\useinnertheme{circles}
+%\useinnertheme{rectangles}
+
+\newbool{russian}
+\booltrue{russian}  % Загружает русскоязычный логотип ВШЭ
+\usepackage{HSE-theme/beamerthemeHSE} % Подгружаем тему
+
+
+
+%%% Работа с русским языком
+\usepackage{cmap}					% поиск в PDF
+\usepackage{mathtext} 				% русские буквы в формулах
+\usepackage[T2A]{fontenc}			% кодировка
+\usepackage[utf8]{inputenc}			% кодировка исходного текста
+%%% Работа с русским языком и шрифтами
+\usepackage[english,russian]{babel}   % загружает пакет многоязыковой вёрстки
+\usepackage[no-math]{fontspec}      % подготавливает загрузку шрифтов Open Type, True Type и др.
+	\setsansfont{HSE Sans} 
+	\setmonofont{Courier New}
+\usepackage{mathspec}
+	\setmathsfont(Digits,Latin,Greek)[Numbers={Lining,Proportional}]{HSE Sans}
+	\setmathrm[Numbers={Lining,Proportional}]{HSE Sans}
+\uselanguage{russian}
+\languagepath{russian}
+\deftranslation[to=russian]{Theorem}{Теорема}
+\deftranslation[to=russian]{Definition}{Определение}
+\deftranslation[to=russian]{Definitions}{Определения}
+\deftranslation[to=russian]{Corollary}{Следствие}
+\deftranslation[to=russian]{Fact}{Факт}
+\deftranslation[to=russian]{Example}{Пример}
+\deftranslation[to=russian]{Examples}{Примеры}
+
+
+%%% Дополнительная работа с математикой
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools} % AMS
+\usepackage{icomma} % "Умная" запятая: $0,2$ --- число, $0, 2$ --- перечисление
+
+%% Номера формул
+%\mathtoolsset{showonlyrefs=true} % Показывать номера только у тех формул, на которые есть \eqref{} в тексте.
+%\usepackage{leqno} % Нумерация формул слева
+
+%% Свои команды
+\DeclareMathOperator{\sgn}{\mathop{sgn}}
+
+%% Перенос знаков в формулах (по Львовскому)
+\newcommand*{\hm}[1]{#1\nobreak\discretionary{}
+	{\hbox{$\mathsurround=0pt #1$}}{}}
+
+%%% Работа с картинками
+\usepackage{graphicx}  % Для вставки рисунков
+\graphicspath{{images/}{images2/}}  % папки с картинками
+\setlength\fboxsep{3pt} % Отступ рамки \fbox{} от рисунка
+\setlength\fboxrule{1pt} % Толщина линий рамки \fbox{}
+\usepackage{wrapfig} % Обтекание рисунков текстом
+\usepackage{caption}
+
+
+%%% Работа с таблицами
+\usepackage{array,tabularx,tabulary,booktabs} % Дополнительная работа с таблицами
+\usepackage{longtable}  % Длинные таблицы
+\usepackage{multirow} % Слияние строк в таблице
+
+%%% Программирование
+\usepackage{etoolbox} % логические операторы
+
+%%% Другие пакеты
+\usepackage{lastpage} % Узнать, сколько всего страниц в документе.
+\usepackage{soul} % Модификаторы начертания
+\usepackage{csquotes} % Еще инструменты для ссылок
+%\usepackage[style=authoryear,maxcitenames=2,backend=biber,sorting=nty]{biblatex}
+\usepackage{multicol} % Несколько колонок
+
+%%% Картинки
+\usepackage{tikz} % Работа с графикой
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{verbatim}
+\usetikzlibrary{fadings}
+\usepackage[outline]{contour}
+
+\title{\LARGE \textbf{Emotions matter}}
+\author{Артём Макогон}
+\date{\today}
+\institute[Высшая школа экономики]{National Research University\\ 
+	<<Higher School of Economics>>}
+
+%\input{preamble/preamble}
+
+
+\begin{document}
+	\pgfplotsset{compat=1.18}
+	
+	\begin{frame}
+		\maketitle
+	\end{frame}
+	
+
+    \section{Intro}
+    \subsection{test}
+
+
+    \begin{frame}
+
+    \frametitle{\insertsection} 
+	\framesubtitle{\insertsubsection}
+        lol
+    \end{frame}
+\end{document}
