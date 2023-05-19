@@ -76,31 +76,70 @@
 \usetikzlibrary{fadings}
 \usepackage[outline]{contour}
 
+\usepackage{chngcntr} % нумерация графиков и таблиц по секциям
+\counterwithin{table}{section}
+\counterwithin{figure}{section}
+
+
 \title{Реализация поддержки асинхронного программирования для фреймворка \texttt{DSLab}}
 \author{Артём Макогон}
 \date{\today}
-\institute[Высшая школа экономики]{National Research University\\ 
-	<<Higher School of Economics>>}
+% \institute[Высшая школа экономики]{National Research University\\ 
+	% <<Higher School of Economics>>}
 
 %\input{preamble/preamble}
 
 
 \begin{document}
-	\pgfplotsset{compat=1.18}
 	
 	\begin{frame}
 		\maketitle
 	\end{frame}
 	
 
-    \section{Intro}
-    \subsection{test}
+    \section{Введение}
+    \subsection{Описание предметной области}
 
 
     \begin{frame}
-
     \frametitle{\insertsection} 
 	\framesubtitle{\insertsubsection}
-        lol
+
+	\begin{figure}
+		\centering
+		\includegraphics<1>[width=\linewidth]{images/event_pipeline_0}
+		\includegraphics<2>[width=\linewidth]{images/event_pipeline_1}
+		\includegraphics<3>[width=\linewidth]{images/event_pipeline_2}
+		\includegraphics<4>[width=\linewidth]{images/event_pipeline_3}
+		\includegraphics<5>[width=\linewidth]{images/event_pipeline_4}
+		\includegraphics<6>[width=\linewidth]{images/event_pipeline_5}
+		\includegraphics<7>[width=\linewidth]{images/event_pipeline_6}
+		\includegraphics<8>[width=\linewidth]{images/event_pipeline_7}
+		\includegraphics<9>[width=\linewidth]{images/event_pipeline_8}
+		\includegraphics<10>[width=\linewidth]{images/event_pipeline_9}
+		\label{simulation}
+		\caption*{Исполнение симуляции}
+	\end{figure}
+        
     \end{frame}
+
+	\subsection{Архитектура проекта DSLab}
+	\begin{frame}
+		\frametitle{\insertsection} 
+		\framesubtitle{\insertsubsection}
+
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.9\linewidth]{images/dslab_arc}
+			\caption*{Архитектура DSLab}
+			\label{dslab_arc}
+		\end{figure}
+	\end{frame}
+
+	\subsection{\texttt{Callback} модель. Пользовательский код.}
+	\begin{frame}
+		\frametitle{\insertsection} 
+		\framesubtitle{\insertsubsection}
+
+	\end{frame}
 \end{document}
