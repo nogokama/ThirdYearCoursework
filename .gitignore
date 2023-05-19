@@ -2,6 +2,7 @@
 *.log 
 *.pdf
 !Content/images/*.pdf
+!Content/HSE-theme/*.pdf
 *.aux
 *.gz
 *.fdb_latexmk
