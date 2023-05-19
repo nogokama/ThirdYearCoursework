@@ -10,6 +10,7 @@
 *.nav
 *.snm
 *.bcf
+*.xdv
 *.blg
 *.run.xml
 *.toc
