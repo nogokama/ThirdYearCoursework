@@ -1,3 +1,5 @@
-## Промежуточный отчет. 
+## Реализация поддержки асинхронного программирования для фреймворка DSLab
 
-[План](https://nogokama.github.io/ThirdYearCoursework/Makogon.pdf)
+[Отчет](https://nogokama.github.io/ThirdYearCoursework/report.pdf)
+[Презентация](https://nogokama.github.io/ThirdYearCoursework/presentation.pdf)
+
