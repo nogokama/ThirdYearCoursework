@@ -10,7 +10,7 @@ function latex_build {
 }
 
 names=(
-    "main"
+    "report"
     "presentation"
 )
 
