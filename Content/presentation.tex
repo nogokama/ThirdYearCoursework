@@ -14,10 +14,7 @@
 %\useinnertheme{circles}
 %\useinnertheme{rectangles}
 
-\newbool{russian}
-\booltrue{russian}  % Загружает русскоязычный логотип ВШЭ
 \usepackage{HSE-theme/beamerthemeHSE} % Подгружаем тему
-
 
 
 %%% Работа с русским языком
@@ -80,6 +77,10 @@
 \counterwithin{table}{section}
 \counterwithin{figure}{section}
 
+\input{Parts/rustcode.tex}
+\usepackage{setspace}
+\usepackage{color}
+
 
 \title{Реализация поддержки асинхронного программирования для фреймворка \texttt{DSLab}}
 \author{Артём Макогон}
@@ -87,7 +88,6 @@
 % \institute[Высшая школа экономики]{National Research University\\ 
 	% <<Higher School of Economics>>}
 
-%\input{preamble/preamble}
 
 
 \begin{document}
@@ -135,12 +135,102 @@
 			\label{dslab_arc}
 		\end{figure}
 	\end{frame}
-	
 
-	\subsection{\texttt{Callback} модель. Пользовательский код.}
-	\begin{frame}
+
+	\subsection{\texttt{Callback} модель. Реализация пользовательского Process.}
+	\begin{frame}[fragile]
+		\frametitle{\insertsection} 
+		\framesubtitle{\insertsubsection}
+		\begin{columns}[c] 
+			\begin{column}{0.8\textwidth} % First column
+		\begin{figure}
+			\footnotesize
+			\centering
+			\begin{rustcode}[escapeinside={(*@}{@*)}]
+fn on(&mut self, event: Event) {
+  cast!(match event.data {
+    Start {} => {
+      self.on_start(); (*@\textcolor{blue}{\rule{1em}{1em}}@*)
+    }
+    DownloadCompleted {data} => {
+      self.on_download_completed(data); (*@\textcolor{red}{\rule{1em}{1em}}@*)
+    }
+    DiskWriteCompleted => {
+      self.on_disk_write_completed();(*@\textcolor{green}{\rule{1em}{1em}}@*)
+    }
+  })
+}
+			\end{rustcode}
+			\caption*{Реагирование на события.}
+		\end{figure}
+
+	\end{column}
+	
+	\begin{column}{0.24\textwidth}
+		\begin{figure}
+			\scriptsize
+			\centering
+			\begin{rustcode}[escapeinside={(*@}{@*)}]
+impl Process{
+    (*@\textcolor{red}{\rule{1.5em}{1.5em}}@*)
+
+    (*@\textcolor{blue}{\rule{1.5em}{1.5em}}@*)
+
+    (*@\textcolor{green}{\rule{1.5em}{1.5em}}@*)
+}
+			\end{rustcode}
+		\end{figure}
+	\end{column}
+	\end{columns}
+
+	\end{frame}
+
+	\subsection{Преимущества асинхронного подхода}
+	\begin{frame}[fragile]
 		\frametitle{\insertsection} 
 		\framesubtitle{\insertsubsection}
 
+		\begin{figure}
+			\footnotesize
+			\centering
+			\begin{rustcode}
+async fn add_file_to_storage(some_file) {
+  send_file_to_all_replicas(some_file);
+  result = wait_confirmation_from_all().await;
+
+  if result.has_quorum {
+    send_commit_to_replicas(result.nodes);
+    wait_commit_confirmation_from(result.nodes).await;
+
+    send_ok_message_to_user();
+  } else {
+    send_reject_message_to_user();
+  }
+}
+			\end{rustcode}
+			\caption*{Псевдокод асинхронного взаимодействия нод в симуляции}
+		\end{figure}
+
+
 	\end{frame}
+
+	\subsection{Постановка задачи}
+	\begin{frame}[fragile]
+		\frametitle{\insertsection} 
+		\framesubtitle{\insertsubsection}
+
+		
+		Целью является реализация поддержки асинхронного программирования для фреймворка \texttt{DSLab}. Для этого необходимо:
+
+		\begin{itemize}
+			\item Реализовать асинхронное расширение для существующего ядра dslab-core.
+			\item Добавить примеры использования нового функционала высокоуровневыми компонентами.
+			\item Написать подробную документацию нового API и покрыть реализацию тестами.
+		\end{itemize}
+
+
+	\end{frame}
+
+
+
 \end{document}

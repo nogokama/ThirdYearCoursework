@@ -9,6 +9,7 @@
 *.fls
 *.bbl
 *.nav
+*.vrb
 *.snm
 *.bcf
 *.xdv
