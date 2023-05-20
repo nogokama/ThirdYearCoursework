@@ -276,7 +276,7 @@ async fn add_file_to_storage(some_file) {
 		\begin{figure}
 			\centering
 			\includegraphics[width=\linewidth]{images/dslab_overview}
-			\caption*{Внутреннее устройство \texttt{DSLab}}
+			\caption*{Внутреннее устройство \texttt{dslab-core}}
 		\end{figure}
 	\end{frame}
 
@@ -336,4 +336,105 @@ async fn action(&self) {
 	\end{columns}
  \end{frame}
 
+
+ \section{Внутреннее устройство и реализация}
+ \subsection{\texttt{Callback}-based модель}
+ \begin{frame}[fragile]
+	\frametitle{\insertsection} 
+	\framesubtitle{\insertsubsection}
+	\vspace{-15pt}
+	\begin{figure}
+		\centering
+		\includegraphics<1>[width=0.72\linewidth]{images/callback_process_1}
+		\includegraphics<2>[width=0.72\linewidth]{images/callback_process_2}
+		\includegraphics<3>[width=0.72\linewidth]{images/callback_process_3}
+		\includegraphics<4>[width=0.72\linewidth]{images/callback_process_4}
+	\end{figure}
+ \end{frame}
+
+ \section{Внутреннее устройство и реализация}
+ \subsection{Асинхронная модель}
+ \begin{frame}[fragile]
+	\frametitle{\insertsection} 
+	\framesubtitle{\insertsubsection}
+	\vspace{-10pt}
+	\begin{figure}
+		\centering
+		\includegraphics<1>[width=0.9\linewidth]{images/async_process_1}
+		\includegraphics<2>[width=0.9\linewidth]{images/async_process_2}
+		\includegraphics<3>[width=0.9\linewidth]{images/async_process_3}
+		\includegraphics<4>[width=0.9\linewidth]{images/async_process_4}
+	\end{figure}
+ \end{frame}
+
+ \section{Тестирование и замеры производительности}
+ \subsection{\texttt{Ping-pong}}
+
+ \begin{frame}[fragile]
+	\frametitle{\insertsection} 
+	\framesubtitle{\insertsubsection}
+
+	\begin{columns}
+		\begin{column}[t]{0.3\linewidth}
+			\small
+			\begin{table}[H]
+				\centering
+				\begin{tabular}{|c|c|}
+					\hline
+					Arg & Value \\
+					\hline
+					Hosts & 100000 \\
+					\hline
+					Peers per host &  100\\
+					\hline
+					Iterations & 100 \\ 
+					\hline
+				\end{tabular}
+			\caption*{\hspace{1cm}Аргументы}
+			\end{table}
+		\end{column}
+		\begin{column}[t]{0.6\linewidth}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\linewidth]{images/ping_pong_scheme}
+			\end{figure}
+		\end{column}
+	\end{columns}
+	
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			Example & Elapsed time & Events/s & Iterations/s \\
+			\hline
+			\texttt{async-ping-pong} & 16.45s & 1234103 & 6.08\\
+			\hline
+			\texttt{ping-pong} &  8.20s & 2452670 & 12.20\\
+			\hline
+		\end{tabular}
+		\caption*{Сравнение производительности}
+	\end{table}
+ \end{frame}
+
+ \begin{frame}[fragile]
+	\frametitle{\insertsection} 
+	\framesubtitle{\insertsubsection}
+	\vspace{-0.8cm}
+	\begin{figure}
+		\includegraphics[width=0.8\linewidth]{images/async-ping-pong}
+		\caption*{Сравнение производительности}
+	\end{figure}
+ \end{frame}
+
+ \subsection{\texttt{Master-workers}}
+
+ \begin{frame}[fragile]
+	\frametitle{\insertsection} 
+	\framesubtitle{\insertsubsection}
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.5\linewidth]{images/master_workers_scheme}
+	\end{figure}
+ \end{frame}
 \end{document}
