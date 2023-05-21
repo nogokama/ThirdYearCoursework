@@ -293,31 +293,35 @@ async fn add_file_to_storage(some_file) {
  \begin{frame}[fragile]
 	\frametitle{\insertsection} 
 	\framesubtitle{\insertsubsection}
-
+	\vspace{-0.7cm}
 	\begin{columns}
-		\begin{column}[c]{0.45\linewidth}
+		\begin{column}[c]{0.40\linewidth}
 			\vspace{0.5cm}
 			\begin{figure}
 				\centering
 				\scriptsize
 				\begin{rustcode}
-fn on_start_action(&self) {
+fn on_start_action() {
   // do 1
 }
 
-fn on_first_event(&self) {
+fn on_first_event() {
   // do 2
 }
 
-fn on_second_event(&self) {
+fn on_second_event() {
   // do 3
 }
+
+/* ... */
+
+on_start_action();
 			\end{rustcode}
 				\caption*{Синхронный код (разрезан на части разработчиком)}
 			\end{figure}
 		\end{column}
 		\begin{column}[c]{0.05\linewidth}
-			\vspace{0.2cm}
+			\vspace{-1cm}
 			$\iff$
 		\end{column}
 		\begin{column}[c]{0.55\linewidth}
@@ -326,7 +330,7 @@ fn on_second_event(&self) {
 				\centering
 				\scriptsize
 				\begin{rustcode}
-async fn action(&self) {
+async fn action() {
   // do 1
 
   wait_for_first_event().await;
@@ -337,6 +341,11 @@ async fn action(&self) {
 
   // do 3
 }
+
+/* ... */
+
+let future = action();
+future.poll(/**/);
 			\end{rustcode}
 				\caption*{Асинхронный код (разрезан на части компилятором)}
 			\end{figure}
