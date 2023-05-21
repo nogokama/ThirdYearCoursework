@@ -72,6 +72,7 @@
 \usepackage{verbatim}
 \usetikzlibrary{fadings}
 \usepackage[outline]{contour}
+\usepackage{pifont} 
 
 \usepackage{chngcntr} % нумерация графиков и таблиц по секциям
 \counterwithin{table}{section}
@@ -249,26 +250,28 @@ async fn add_file_to_storage(some_file) {
 	\end{frame}
 
 	\subsection{Постановка задачи}
-	\begin{frame}[fragile]
+	\begin{frame}
 		\frametitle{\insertsection} 
 		\framesubtitle{\insertsubsection}
 
-		\vspace{-0.1cm}
-		Цель проекта -- реализация поддержки асинхронного программирования для фреймворка \texttt{DSLab}. Для этого необходимо:
-		\vspace{3pt}
-		\begin{itemize}
-			\item Реализовать асинхронное расширение для существующего ядра \texttt{dslab-core}. Поддержать возможности:
-			\begin{itemize}
-				\item запустить асинхронную задачу;
-				\item <<заснуть>> на определенное время внутри симуляции;
-				\item асинхронно ждать событий от других компонент;
-				\item комбинировать ожидания с помощью методов \texttt{futures}.
-			\end{itemize}
-			\item Добавить примеры использования нового функционала высокоуровневыми компонентами.
-			\item Написать документацию нового \texttt{API} и покрыть реализацию тестами.
-		\end{itemize}
-
-
+		\vspace{0.3cm}
+		\begin{columns}
+			\begin{column}{1.05\linewidth}
+				\underline{Цель проекта} -- реализация поддержки асинхронного программирования для фреймворка \texttt{DSLab}. Для этого необходимо:
+				\vspace{3pt}
+				\begin{itemize}
+					\item Реализовать эффективное асинхронное расширение для существующего ядра \texttt{dslab-core}. Поддержать возможности:
+					\begin{itemize}
+						\item запустить асинхронную задачу;
+						\item \texttt{<\textless}заснуть\texttt{>\textgreater} на определенное время внутри симуляции;
+						\item асинхронно ждать событий от других компонент;
+						\item комбинировать ожидания с помощью методов \texttt{futures}.
+					\end{itemize}
+					\item Добавить примеры использования нового функционала высокоуровневыми компонентами.
+					\item Написать документацию нового \texttt{API} и покрыть реализацию тестами.
+				\end{itemize}
+			\end{column}
+		\end{columns}
 	\end{frame}
 
 \subsection{Дизайн и структура ядра \texttt{dslab-core}}
@@ -286,7 +289,7 @@ async fn add_file_to_storage(some_file) {
 	\end{frame}
 
  \section{Управление исполнением}
-
+\subsection{\texttt{Stackless}-корутины}
  \begin{frame}[fragile]
 	\frametitle{\insertsection} 
 	\framesubtitle{\insertsubsection}
@@ -341,6 +344,72 @@ async fn action(&self) {
 	\end{columns}
  \end{frame}
 
+ \section{Новое \texttt{API} для пользователей}
+ \subsection{Расширение \texttt{SimulationContext}}
+
+ \begin{frame}[fragile]
+	\frametitle{\insertsection} 
+	\framesubtitle{\insertsubsection}
+
+	\begin{columns}
+\begin{column}[t]{1.1\linewidth}
+	\vspace{-0.5cm}
+	\begin{itemize}
+		\setlength{\itemsep}{0.7em} 
+		\item Запустить асинхронную задачу: 
+		\begin{itemize}
+			\item[\footnotesize\textgreater]  \lstinline[language=Rust, basicstyle=\footnotesize\ttfamily]{fn spawn(&self, future: impl Future<Output = ()>)}
+		\end{itemize}
+		\item \texttt{<\textless}Заснуть\texttt{>\textgreater} на определенное время:
+			\begin{itemize}
+				\setlength{\itemsep}{0.5em} 
+				\item[\footnotesize\textgreater]  \lstinline[language=Rust, basicstyle=\footnotesize\ttfamily]{async fn async_wait_for(&self, timeout: f64)}
+			\end{itemize}
+		\item Дождаться события с \texttt{<\textless}данными\texttt{>\textgreater} типа \texttt{T} от компонента \texttt{src}:
+			\begin{itemize}
+				\setlength{\itemsep}{0.5em} 
+				\item[\footnotesize\textgreater] \lstinline[language=Rust,basicstyle=\footnotesize\ttfamily]{async fn async_handle_event<T>(src: Id) -> (Event, T)}
+				\item[\footnotesize\textgreater] \lstinline[language=Rust,basicstyle=\footnotesize\ttfamily]{async fn async_wait_for_event<T>(src: Id, timeout: f64) -> AwaitResult<T>}
+			\end{itemize}
+		\item Дождаться события с \texttt{<\textless}данными\texttt{>\textgreater} \texttt{T}, деталями \texttt{details} от \texttt{src}:
+		\begin{itemize}
+			\setlength{\itemsep}{0.5em} 
+			\item[\footnotesize\textgreater]\lstinline[language=Rust,basicstyle=\footnotesize\ttfamily]{async fn async_detailed_handle_event<T>(src: Id, details: u64) -> (Event, T)}
+			\item[\footnotesize\textgreater]  \lstinline[language=Rust,basicstyle=\footnotesize\ttfamily]{async fn async_detailed_wait_for_event<T>(src: Id, details: u64, timeout: f64) -> AwaitResult<T>}
+		\end{itemize}
+	\end{itemize}
+\end{column}
+\end{columns}
+ \end{frame}
+
+ \subsection{Детализированное ожидание. Пример}
+
+ \begin{frame}[fragile]
+	\frametitle{\insertsection} 
+	\framesubtitle{\insertsubsection}
+
+	\begin{columns}
+		\begin{column}{1.1\linewidth}
+			\begin{figure}[H]
+				\footnotesize
+			\begin{rustcode}
+async fn process_data_transfer_request(
+	&self, request: Request) {
+  let request_id = self.network.send(request);
+  
+  self.ctx.
+   async_detailed_handle_event::<DataTransferCompleted>(
+    self.network.id, 
+    request_id,
+  ).await;
+}
+			\end{rustcode}
+			\caption*{Использование детализированного асинхронного ожидания}
+			\end{figure}
+		\end{column}
+	\end{columns}
+
+ \end{frame}
 
  \section{Внутреннее устройство и реализация}
  \subsection{\texttt{Callback}-based модель}
@@ -356,6 +425,8 @@ async fn action(&self) {
 		\alt<4>{\hspace{-10.5pt}\includegraphics[width=0.72\linewidth]{images/callback_process_4}}{}
 	\end{figure}
  \end{frame}
+
+
 
  \section{Внутреннее устройство и реализация}
  \subsection{Асинхронная модель}
@@ -373,7 +444,7 @@ async fn action(&self) {
  \end{frame}
 
  \section{Тестирование}
- \subsection{\texttt{Ping-pong}. Производительность.}
+ \subsection{\texttt{Ping-pong}. Производительность}
 
  \begin{frame}[fragile]
 	\frametitle{\insertsection} 
@@ -429,7 +500,7 @@ async fn action(&self) {
 	\end{figure}
  \end{frame}
 
- \subsection{\texttt{Ping-pong}. Сравнение кода.}
+ \subsection{\texttt{Ping-pong}. Сравнение кода}
 
  \begin{frame}[fragile]
 	\frametitle{\insertsection} 
@@ -497,7 +568,7 @@ async fn process(&self) {
 	\end{columns}
  \end{frame}
 
- \subsection{\texttt{Master-workers}}
+ \subsection{\texttt{Master-workers}. Производительность}
 
  \begin{frame}[fragile]
 	\frametitle{\insertsection} 
@@ -543,5 +614,102 @@ async fn process(&self) {
 		\caption*{Сравнение производительности}
 		\label{cmp:master-workers}
 	\end{table}
+\end{frame}
+
+\subsection{\texttt{Master-workers}. Сравнение кода компонента \texttt{Worker}}
+
+\begin{frame}[fragile]
+	\frametitle{\insertsection} 
+	\framesubtitle{\insertsubsection}
+	\begin{columns}
+		\begin{column}[t]{0.55\linewidth}
+			\vspace{-0.7cm}
+			\begin{figure}
+				\centering
+				\scriptsize
+				\begin{rustcode}
+pub struct Worker {
+ tasks: HashMap<u64, TaskInfo>,
+ computations: HashMap<u64, u64>,
+ reads: HashMap<u64, u64>,
+ writes: HashMap<u64, u64>,
+ downloads: HashMap<usize, u64>,
+ uploads: HashMap<usize, u64>,
+}
+
+fn on_task_request(request);
+fn on_data_read_completed(request_id);
+fn on_comp_started(comp_id);
+fn on_comp_finished(comp_id);
+fn on_data_write_completed(request_id);
+
+fn on_data_transfer_completed(data);
+			\end{rustcode}
+			\vspace{-0.3cm}
+				\caption*{\texttt{master-workers}}
+			\end{figure}
+		\end{column}
+		\vline
+		\hspace{2pt}
+		\begin{column}[t]{0.57\linewidth}
+			\vspace{-0.6cm}
+			\begin{figure}
+				\centering
+				\scriptsize
+				\begin{rustcode}
+fn on_task_request(req) {
+  self.ctx.spawn(
+    self.process_task(req));
+}
+
+async fn process_task(&self, req: TaskRequest) {
+  let mut task = TaskInfo {req};
+
+  self.download_data(&task).await;
+  self.read_data(&task).await;
+  self.run_task(&task).await;
+  self.write_data(&task).await;
+  self.upload_result(&task).await;
+}
+			\end{rustcode}
+			\vspace{0.6cm}
+				\caption*{\texttt{async-master-workers}}
+			\end{figure}
+		\end{column}
+	\end{columns}
+	
+\end{frame}
+
+\section{Заключение}
+
+\begin{frame}[fragile]
+	\frametitle{\insertsection} 
+	\framesubtitle{\insertsubsection}
+
+	\vspace{-0.5cm}
+	\begin{columns}
+		\begin{column}{1.1\linewidth}
+			\begin{itemize}
+				\item[\ding{51}] Реализовать эффективное асинхронное расширение для существующего ядра \texttt{dslab-core}
+				\item[\ding{51}] Добавить примеры использования нового функционала высокоуровневыми компонентами.
+				\item[\ding{51}] Написать документацию нового \texttt{API} и покрыть реализацию тестами.
+			\end{itemize}
+
+			\alt<2>{
+				\vspace{0.5cm}
+				\begin{itemize}
+				\item \texttt{Stateful}-процесс $\implies$ используем асинхронный подход.
+				\item \texttt{Stateless}-процесс $\implies$ используем модель \texttt{callback}-ов. 
+			\end{itemize}
+			}{}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{}
+	\centering
+	\vspace{3.5cm}
+\Huge \textcolor{HSEblue}{\textbf{Вопросы}}
+
 \end{frame}
 \end{document}
