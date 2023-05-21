@@ -720,6 +720,44 @@ async fn process(&self) {
 	\end{columns}
  \end{frame}
 
+ \subsection{Сравнение с аналогами. \texttt{SimGrid}.}
+\begin{frame}[fragile]
+	\frametitle{\insertsection} 
+	\framesubtitle{\insertsubsection}
+
+	\vspace{-1cm}
+	\begin{columns}
+		\begin{column}{1.1\linewidth}
+			\begin{figure}
+				\centering 
+				\scriptsize
+				\begin{cppcode}
+void Process(int id, Mailbox* in, vector<Mailbox*> peers, 
+ int iters) {
+  // wait for Start message
+  auto* msg = in->get<Message>();
+  bool stopped = false;
+  bool wait_reply = false;
+  while (!stopped) {
+    if (pings_to_send > 0 && !wait_reply) {
+      MailBox* peer_mailbox = /* choose peer */;
+      peer_mailbox->put_init(new Message(/*create message*/));
+      wait_reply = true;
+      pings_to_send -= 1;
+    }
+    msg = in->get<Message>();
+    if (msg->type == MessageType::PING) {/**/} 
+    else if (msg->type == MessageType::PONG) {/**/} 
+    else if (msg->type == MessageType::STOP) {/**/}
+  }
+}
+				\end{cppcode}
+				\vspace{-0.2cm}
+				\caption*{Код процесса \texttt{ping-pong} в фреймворке \texttt{SimGrid}}
+			\end{figure}
+		\end{column}
+	\end{columns}
+\end{frame}
 \subsection{Дискретно-событийное моделирование}
 \begin{frame}
     \frametitle{\insertsection} 
