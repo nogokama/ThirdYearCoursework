@@ -627,7 +627,7 @@ async fn process_data_transfer_request(
 			\begin{figure}
 				\centering
 				\scriptsize
-				\begin{rustcode}
+				\begin{rustcode}[escapeinside={(*@}{@*)}]
 pub struct Worker {
  tasks: HashMap<u64, TaskInfo>,
  computations: HashMap<u64, u64>,
@@ -638,14 +638,14 @@ pub struct Worker {
 }
 
 fn on_task_request(request);
-fn on_data_read_completed(request_id);
+fn on_data_read_completed(r_id);
 fn on_comp_started(comp_id);
 fn on_comp_finished(comp_id);
-fn on_data_write_completed(request_id);
+fn on_data_write_completed(r_id);
 
-fn on_data_transfer_completed(data);
+fn on_data_transfer_completed((*@\textcolor{HSEgreen}{*}@*));
 			\end{rustcode}
-			\vspace{-0.3cm}
+			\vspace{0cm}
 				\caption*{\texttt{master-workers}}
 			\end{figure}
 		\end{column}
@@ -672,7 +672,7 @@ async fn process_task(&self, req: TaskRequest) {
   self.upload_result(&task).await;
 }
 			\end{rustcode}
-			\vspace{0.6cm}
+			\vspace{0.25cm}
 				\caption*{\texttt{async-master-workers}}
 			\end{figure}
 		\end{column}
