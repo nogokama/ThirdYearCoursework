@@ -149,7 +149,6 @@
 		\label{simulation}
 		\caption*{Исполнение симуляции}
 	\end{figure}
-        
     \end{frame}
 
 	\subsection{Архитектура проекта \texttt{DSLab}}
@@ -166,7 +165,7 @@
 	\end{frame}
 
 
-	\subsection{\texttt{Callback} модель. Реализация \texttt{Process}.}
+	\subsection{\texttt{Callback} модель. Фрагментированная реализация \texttt{Process}.}
 	\begin{frame}[fragile]
 		\frametitle{\insertsection} 
 		\framesubtitle{\insertsubsection}
@@ -179,13 +178,13 @@
 fn on(&mut self, event: Event) {
   cast!(match event.data {
     Start {} => {
-      self.on_start(); (*@\tikz{\node[draw, fill=OldHSEblue, rounded corners, minimum width=1.5em, minimum height=1.5em] {};}@*)
+      self.(*@\footnotesize\textcolor{OldHSEblue}{on\_start();}@*)
     }
     DownloadCompleted {data} => {
-      self.on_download_completed(data); (*@\tikz{\node[draw, fill=orange, rounded corners, minimum width=1.5em, minimum height=1.5em] {};}@*)
+      self.(*@\footnotesize\textcolor{orange}{on\_download\_completed(data);}@*)
     }
     DiskWriteCompleted => {
-      self.on_disk_write_completed(); (*@\tikz{\node[draw, fill=HSEgreen, rounded corners, minimum width=1.5em, minimum height=1.5em] {};}@*)
+      self.(*@\footnotesize\textcolor{HSEgreen}{on\_disk\_write\_completed();}@*)
     }
   })
 }
@@ -201,15 +200,15 @@ fn on(&mut self, event: Event) {
 			\centering
 			\begin{rustcode}[escapeinside={(*@}{@*)}]
 impl Process {
-  fn /**/ {
-    (*@\tikz{\node[draw, fill=orange, rounded corners, minimum width=1.5em, minimum height=1.5em] {};}
+  fn (*@\footnotesize\textcolor{OldHSEblue}{on...}@*) {
+    (*@\tikz{\node[draw, fill=OldHSEblue, rounded corners, minimum width=1.5em, minimum height=1.5em] {};}
 	@*)
   }
-  fn /**/ {
-    (*@\tikz{\node[draw, fill=HSEgreen, rounded corners, minimum width=1.5em, minimum height=1.5em] {};}@*)
+  fn (*@\footnotesize\textcolor{orange}{on...}@*) {
+    (*@\tikz{\node[draw, fill=orange, rounded corners, minimum width=1.5em, minimum height=1.5em] {};}@*)
   }
-  fn /**/ {
-    (*@\tikz{\node[draw, fill=OldHSEblue, rounded corners, minimum width=1.5em, minimum height=1.5em] {};}@*)
+  fn (*@\footnotesize\textcolor{HSEgreen}{on...}@*) {
+    (*@\tikz{\node[draw, fill=HSEgreen, rounded corners, minimum width=1.5em, minimum height=1.5em] {};}@*)
   }
 }
 			\end{rustcode}
@@ -254,11 +253,17 @@ async fn add_file_to_storage(some_file) {
 		\frametitle{\insertsection} 
 		\framesubtitle{\insertsubsection}
 
-		\vspace{0.5cm}
+		\vspace{-0.1cm}
 		Цель проекта -- реализация поддержки асинхронного программирования для фреймворка \texttt{DSLab}. Для этого необходимо:
 		\vspace{3pt}
 		\begin{itemize}
-			\item Реализовать асинхронное расширение для существующего ядра \texttt{dslab-core}.
+			\item Реализовать асинхронное расширение для существующего ядра \texttt{dslab-core}. Поддержать возможности:
+			\begin{itemize}
+				\item запустить асинхронную задачу;
+				\item <<заснуть>> на определенное время внутри симуляции;
+				\item асинхронно ждать событий от других компонент;
+				\item комбинировать ожидания с помощью методов \texttt{futures}.
+			\end{itemize}
 			\item Добавить примеры использования нового функционала высокоуровневыми компонентами.
 			\item Написать документацию нового \texttt{API} и покрыть реализацию тестами.
 		\end{itemize}
@@ -345,10 +350,10 @@ async fn action(&self) {
 	\vspace{-15pt}
 	\begin{figure}
 		\centering
-		\includegraphics<1>[width=0.72\linewidth]{images/callback_process_1}
-		\includegraphics<2>[width=0.72\linewidth]{images/callback_process_2}
-		\includegraphics<3>[width=0.72\linewidth]{images/callback_process_3}
-		\includegraphics<4>[width=0.72\linewidth]{images/callback_process_4}
+		\alt<1>{\includegraphics[width=0.72\linewidth]{images/callback_process_1}}{}
+		\alt<2>{\hspace{-3.5pt}\includegraphics[width=0.72\linewidth]{images/callback_process_2}}{}
+		\alt<3>{\hspace{-7pt}\includegraphics[width=0.72\linewidth]{images/callback_process_3}}{}
+		\alt<4>{\hspace{-10.5pt}\includegraphics[width=0.72\linewidth]{images/callback_process_4}}{}
 	\end{figure}
  \end{frame}
 
@@ -358,17 +363,17 @@ async fn action(&self) {
 	\frametitle{\insertsection} 
 	\framesubtitle{\insertsubsection}
 	\vspace{-10pt}
-	\begin{figure}
+	\begin{figure}[H]
 		\centering
-		\includegraphics<1>[width=0.9\linewidth]{images/async_process_1}
-		\includegraphics<2>[width=0.9\linewidth]{images/async_process_2}
-		\includegraphics<3>[width=0.9\linewidth]{images/async_process_3}
-		\includegraphics<4>[width=0.9\linewidth]{images/async_process_4}
+		\alt<1>{\includegraphics<1>[width=0.9\linewidth]{images/async_process_1}}{}
+		\alt<2>{\hspace{-3.5pt}\includegraphics[width=0.9\linewidth]{images/async_process_2}}{}
+		\alt<3>{\hspace{-7pt}\includegraphics[width=0.9\linewidth]{images/async_process_3}}{}
+		\alt<4>{\hspace{-10.5pt}\includegraphics[width=0.9\linewidth]{images/async_process_4}}{}
 	\end{figure}
  \end{frame}
 
- \section{Тестирование и замеры производительности}
- \subsection{\texttt{Ping-pong}}
+ \section{Тестирование}
+ \subsection{\texttt{Ping-pong}. Производительность.}
 
  \begin{frame}[fragile]
 	\frametitle{\insertsection} 
@@ -380,8 +385,6 @@ async fn action(&self) {
 			\begin{table}[H]
 				\centering
 				\begin{tabular}{|c|c|}
-					\hline
-					Arg & Value \\
 					\hline
 					Hosts & 100000 \\
 					\hline
@@ -419,11 +422,79 @@ async fn action(&self) {
  \begin{frame}[fragile]
 	\frametitle{\insertsection} 
 	\framesubtitle{\insertsubsection}
-	\vspace{-0.8cm}
+	\vspace{-0.4cm}
 	\begin{figure}
 		\includegraphics[width=0.8\linewidth]{images/async-ping-pong}
 		\caption*{Сравнение производительности}
 	\end{figure}
+ \end{frame}
+
+ \subsection{\texttt{Ping-pong}. Сравнение кода.}
+
+ \begin{frame}[fragile]
+	\frametitle{\insertsection} 
+	\framesubtitle{\insertsubsection}
+	\begin{columns}
+		\begin{column}[t]{0.55\linewidth}
+			\vspace{-1cm}
+			\begin{figure}
+				\centering
+				\scriptsize
+				\begin{rustcode}
+pub struct Process {
+  iterations: u32,
+}
+
+fn on_start(&mut self) {
+  let peer = /*random peer*/;
+  self.send(Ping {}, peer);
+}
+
+fn on_ping(&mut self, from: Id) {
+  self.send(Pong {}, from);
+}       
+
+fn on_pong(&mut self, from: Id) {
+  self.iterations -= 1;
+  if self.iterations > 0 {
+    let peer = /*choose peer*/
+    self.send(Ping {}, peer);
+  }
+}
+			\end{rustcode}
+			\vspace{-0.4cm}
+				\caption*{\texttt{ping-pong}}
+			\end{figure}
+		\end{column}
+		\begin{column}[t]{0.55\linewidth}
+			\vspace{-1cm}
+			\begin{figure}
+				\centering
+				\scriptsize
+				\begin{rustcode}
+fn on_start(&self) {
+  self.ctx.spawn(self.process());
+}
+
+fn on_ping(&mut self, from: Id) {
+  self.send(Pong {}, from);
+}  
+
+async fn process(&self) {
+  for _i in 0..self.iterations {
+    let peer = /*choose peer*/;
+    self.send(Ping {}, peer);
+
+    // stop until receive Pong
+    self.ctx.async_handle_event::<Pong>(peer).await;
+  }
+}
+			\end{rustcode}
+			\vspace{-0.2cm}
+				\caption*{\texttt{async-ping-pong}}
+			\end{figure}
+		\end{column}
+	\end{columns}
  \end{frame}
 
  \subsection{\texttt{Master-workers}}
@@ -432,9 +503,45 @@ async fn action(&self) {
 	\frametitle{\insertsection} 
 	\framesubtitle{\insertsubsection}
 
-	\begin{figure}[H]
+	\begin{columns}
+		\begin{column}[t]{0.3\linewidth}
+			\vspace{0.5cm}
+			\begin{table}[H]
+				\centering
+				\begin{tabular}{|c|c|}
+					\hline
+					Hosts & 100 \\
+					\hline
+					Tasks &  100000\\
+					\hline
+				\end{tabular}
+			\caption*{Аргументы}
+			\end{table}
+		\end{column}
+		\begin{column}[t]{0.6\linewidth}
+			\vspace{-1cm}
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\linewidth]{images/master_workers_scheme}
+			\end{figure}
+		\end{column}
+	\end{columns}
+	\vspace{0.3cm}
+	\begin{table}[H]
+		\small
 		\centering
-		\includegraphics[width=0.5\linewidth]{images/master_workers_scheme}
-	\end{figure}
- \end{frame}
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			Example & Elapsed time & Scheduling time & Events/s \\
+			\hline
+			\texttt{async-master-workers} & 5.97s & 4.31s & 285059 \\
+			\hline
+			\texttt{master-workers}  & 5.19s & 4.31s & 328392 \\
+			\hline
+		\end{tabular}
+		\caption*{Сравнение производительности}
+		\label{cmp:master-workers}
+	\end{table}
+\end{frame}
 \end{document}
