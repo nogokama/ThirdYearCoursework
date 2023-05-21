@@ -260,6 +260,7 @@ async fn add_file_to_storage(some_file) {
 				\underline{Цель проекта} -- реализация поддержки асинхронного программирования для фреймворка \texttt{DSLab}. Для этого необходимо:
 				\vspace{3pt}
 				\begin{itemize}
+					\setlength{\itemsep}{1em}
 					\item Реализовать эффективное асинхронное расширение для существующего ядра \texttt{dslab-core}. Поддержать возможности:
 					\begin{itemize}
 						\item запустить асинхронную задачу;
@@ -267,8 +268,7 @@ async fn add_file_to_storage(some_file) {
 						\item асинхронно ждать событий от других компонент;
 						\item комбинировать ожидания с помощью методов \texttt{futures}.
 					\end{itemize}
-					\item Добавить примеры использования нового функционала высокоуровневыми компонентами.
-					\item Написать документацию нового \texttt{API} и покрыть реализацию тестами.
+					\item Добавить примеры, написать документацию и тесты.
 				\end{itemize}
 			\end{column}
 		\end{columns}
@@ -500,73 +500,73 @@ async fn process_data_transfer_request(
 	\end{figure}
  \end{frame}
 
- \subsection{\texttt{Ping-pong}. Сравнение кода}
+%  \subsection{\texttt{Ping-pong}. Сравнение кода}
 
- \begin{frame}[fragile]
-	\frametitle{\insertsection} 
-	\framesubtitle{\insertsubsection}
-	\begin{columns}
-		\begin{column}[t]{0.55\linewidth}
-			\vspace{-1cm}
-			\begin{figure}
-				\centering
-				\scriptsize
-				\begin{rustcode}
-pub struct Process {
-  iterations: u32,
-}
+%  \begin{frame}[fragile]
+% 	\frametitle{\insertsection} 
+% 	\framesubtitle{\insertsubsection}
+% 	\begin{columns}
+% 		\begin{column}[t]{0.55\linewidth}
+% 			\vspace{-1cm}
+% 			\begin{figure}
+% 				\centering
+% 				\scriptsize
+% 				\begin{rustcode}
+% pub struct Process {
+%   iterations: u32,
+% }
 
-fn on_start(&mut self) {
-  let peer = /*random peer*/;
-  self.send(Ping {}, peer);
-}
+% fn on_start(&mut self) {
+%   let peer = /*random peer*/;
+%   self.send(Ping {}, peer);
+% }
 
-fn on_ping(&mut self, from: Id) {
-  self.send(Pong {}, from);
-}       
+% fn on_ping(&mut self, from: Id) {
+%   self.send(Pong {}, from);
+% }       
 
-fn on_pong(&mut self, from: Id) {
-  self.iterations -= 1;
-  if self.iterations > 0 {
-    let peer = /*choose peer*/
-    self.send(Ping {}, peer);
-  }
-}
-			\end{rustcode}
-			\vspace{-0.4cm}
-				\caption*{\texttt{ping-pong}}
-			\end{figure}
-		\end{column}
-		\begin{column}[t]{0.55\linewidth}
-			\vspace{-1cm}
-			\begin{figure}
-				\centering
-				\scriptsize
-				\begin{rustcode}
-fn on_start(&self) {
-  self.ctx.spawn(self.process());
-}
+% fn on_pong(&mut self, from: Id) {
+%   self.iterations -= 1;
+%   if self.iterations > 0 {
+%     let peer = /*choose peer*/
+%     self.send(Ping {}, peer);
+%   }
+% }
+% 			\end{rustcode}
+% 			\vspace{-0.4cm}
+% 				\caption*{\texttt{ping-pong}}
+% 			\end{figure}
+% 		\end{column}
+% 		\begin{column}[t]{0.55\linewidth}
+% 			\vspace{-1cm}
+% 			\begin{figure}
+% 				\centering
+% 				\scriptsize
+% 				\begin{rustcode}
+% fn on_start(&self) {
+%   self.ctx.spawn(self.process());
+% }
 
-fn on_ping(&mut self, from: Id) {
-  self.send(Pong {}, from);
-}  
+% fn on_ping(&mut self, from: Id) {
+%   self.send(Pong {}, from);
+% }  
 
-async fn process(&self) {
-  for _i in 0..self.iterations {
-    let peer = /*choose peer*/;
-    self.send(Ping {}, peer);
+% async fn process(&self) {
+%   for _i in 0..self.iterations {
+%     let peer = /*choose peer*/;
+%     self.send(Ping {}, peer);
 
-    // stop until receive Pong
-    self.ctx.async_handle_event::<Pong>(peer).await;
-  }
-}
-			\end{rustcode}
-			\vspace{-0.2cm}
-				\caption*{\texttt{async-ping-pong}}
-			\end{figure}
-		\end{column}
-	\end{columns}
- \end{frame}
+%     // stop until receive Pong
+%     self.ctx.async_handle_event::<Pong>(peer).await;
+%   }
+% }
+% 			\end{rustcode}
+% 			\vspace{-0.2cm}
+% 				\caption*{\texttt{async-ping-pong}}
+% 			\end{figure}
+% 		\end{column}
+% 	\end{columns}
+%  \end{frame}
 
  \subsection{\texttt{Master-workers}. Производительность}
 
