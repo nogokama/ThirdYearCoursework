@@ -362,24 +362,24 @@ future.poll(/**/);
 		\setlength{\itemsep}{0.7em} 
 		\item Запустить асинхронную задачу: 
 		\begin{itemize}
-			\item[\footnotesize\textgreater]  \lstinline[language=Rust, basicstyle=\footnotesize\ttfamily]{fn spawn(&self, future: impl Future<Output = ()>)}
+			\item[\footnotesize\ding{58}]  \lstinline[language=Rust, basicstyle=\footnotesize\ttfamily]{fn spawn(&self, future: impl Future<Output = ()>)}
 		\end{itemize}
 		\item \texttt{<\textless}Заснуть\texttt{>\textgreater} на определенное время:
 			\begin{itemize}
 				\setlength{\itemsep}{0.5em} 
-				\item[\footnotesize\textgreater]  \lstinline[language=Rust, basicstyle=\footnotesize\ttfamily]{async fn async_wait_for(&self, timeout: f64)}
+				\item[\footnotesize\ding{58}]  \lstinline[language=Rust, basicstyle=\footnotesize\ttfamily]{async fn async_wait_for(&self, timeout: f64)}
 			\end{itemize}
 		\item Дождаться события с \texttt{<\textless}данными\texttt{>\textgreater} типа \texttt{T} от компонента \texttt{src}:
 			\begin{itemize}
 				\setlength{\itemsep}{0.5em} 
-				\item[\footnotesize\textgreater] \lstinline[language=Rust,basicstyle=\footnotesize\ttfamily]{async fn async_handle_event<T>(src: Id) -> (Event, T)}
-				\item[\footnotesize\textgreater] \lstinline[language=Rust,basicstyle=\footnotesize\ttfamily]{async fn async_wait_for_event<T>(src: Id, timeout: f64) -> AwaitResult<T>}
+				\item[\footnotesize\ding{58}] \lstinline[language=Rust,basicstyle=\footnotesize\ttfamily]{async fn async_handle_event<T>(src: Id) -> (Event, T)}
+				\item[\footnotesize\ding{58}] \lstinline[language=Rust,basicstyle=\footnotesize\ttfamily]{async fn async_wait_for_event<T>(src: Id, timeout: f64) -> AwaitResult<T>}
 			\end{itemize}
 		\item Дождаться события с \texttt{<\textless}данными\texttt{>\textgreater} \texttt{T}, деталями \texttt{details} от \texttt{src}:
 		\begin{itemize}
 			\setlength{\itemsep}{0.5em} 
-			\item[\footnotesize\textgreater]\lstinline[language=Rust,basicstyle=\footnotesize\ttfamily]{async fn async_detailed_handle_event<T>(src: Id, details: u64) -> (Event, T)}
-			\item[\footnotesize\textgreater]  \lstinline[language=Rust,basicstyle=\footnotesize\ttfamily]{async fn async_detailed_wait_for_event<T>(src: Id, details: u64, timeout: f64) -> AwaitResult<T>}
+			\item[\footnotesize\ding{58}]\lstinline[language=Rust,basicstyle=\footnotesize\ttfamily]{async fn async_detailed_handle_event<T>(src: Id, details: u64) -> (Event, T)}
+			\item[\footnotesize\ding{58}]  \lstinline[language=Rust,basicstyle=\footnotesize\ttfamily]{async fn async_detailed_wait_for_event<T>(src: Id, details: u64, timeout: f64) -> AwaitResult<T>}
 		\end{itemize}
 	\end{itemize}
 \end{column}
