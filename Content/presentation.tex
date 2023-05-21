@@ -746,9 +746,9 @@ void Process(int id, Mailbox* in, vector<Mailbox*> peers,
       pings_to_send -= 1;
     }
     msg = in->get<Message>();
-    if (msg->type == MessageType::PING) {/**/} 
-    else if (msg->type == MessageType::PONG) {/**/} 
-    else if (msg->type == MessageType::STOP) {/**/}
+    if (msg->type == MessageType::PING) {/* handle PING */} 
+    else if (msg->type == MessageType::PONG) {/* handle PONG */} 
+    else if (msg->type == MessageType::STOP) { stopped = true; }
   }
 }
 				\end{cppcode}
