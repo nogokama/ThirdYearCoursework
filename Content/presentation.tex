@@ -137,16 +137,7 @@
 
 	\begin{figure}
 		\centering
-		\includegraphics<1>[width=\linewidth]{images/event_pipeline_0}
-		\includegraphics<2>[width=\linewidth]{images/event_pipeline_1}
-		\includegraphics<3>[width=\linewidth]{images/event_pipeline_2}
-		\includegraphics<4>[width=\linewidth]{images/event_pipeline_3}
-		\includegraphics<5>[width=\linewidth]{images/event_pipeline_4}
-		\includegraphics<6>[width=\linewidth]{images/event_pipeline_5}
-		\includegraphics<7>[width=\linewidth]{images/event_pipeline_6}
-		\includegraphics<8>[width=\linewidth]{images/event_pipeline_7}
-		\includegraphics<9>[width=\linewidth]{images/event_pipeline_8}
-		\includegraphics<10>[width=\linewidth]{images/event_pipeline_9}
+		\includegraphics[width=\linewidth]{images/event_pipeline_6}
 		\label{simulation}
 		\caption*{Исполнение симуляции}
 	\end{figure}
@@ -202,14 +193,14 @@ fn on(&mut self, event: Event) {
 			\begin{rustcode}[escapeinside={(*@}{@*)}]
 impl Process {
   fn (*@\footnotesize\textcolor{OldHSEblue}{on...}@*) {
-    (*@\tikz{\node[draw, fill=OldHSEblue, rounded corners, minimum width=1.5em, minimum height=1.5em] {};}
+    (*@\tikz{\node[draw, fill=OldHSEblue, rounded corners, minimum width=1.5em, minimum height=1.5em, opacity=0.75] {};}
 	@*)
   }
   fn (*@\footnotesize\textcolor{orange}{on...}@*) {
-    (*@\tikz{\node[draw, fill=orange, rounded corners, minimum width=1.5em, minimum height=1.5em] {};}@*)
+    (*@\tikz{\node[draw, fill=orange, rounded corners, minimum width=1.5em, minimum height=1.5em, opacity=0.75] {};}@*)
   }
   fn (*@\footnotesize\textcolor{HSEgreen}{on...}@*) {
-    (*@\tikz{\node[draw, fill=HSEgreen, rounded corners, minimum width=1.5em, minimum height=1.5em] {};}@*)
+    (*@\tikz{\node[draw, fill=HSEgreen, rounded corners, minimum width=1.5em, minimum height=1.5em, opacity=0.75] {};}@*)
   }
 }
 			\end{rustcode}
@@ -229,13 +220,11 @@ impl Process {
 			\footnotesize
 			\centering
 			\begin{rustcode}
-async fn add_file_to_storage(some_file) {
-  send_file_to_all_replicas(some_file);
-  result = wait_confirmation_from_all().await;
-
+async fn collect_file_from_replicas(replicas) {
+  result = download_from_all(replicas).await;
+	
   if result.has_quorum {
-    send_commit_to_replicas(result.nodes);
-    wait_commit_confirmation_from(result.nodes).await;
+    dump_file_to_storage(result.file).await;
 
     send_ok_message_to_user();
   } else {
@@ -243,7 +232,7 @@ async fn add_file_to_storage(some_file) {
   }
 }
 			\end{rustcode}
-			\caption*{Псевдокод асинхронного взаимодействия нод в симуляции}
+			\caption*{Псевдокод асинхронного взаимодействия компонент в симуляции}
 		\end{figure}
 
 
@@ -283,7 +272,13 @@ async fn add_file_to_storage(some_file) {
 
 		\begin{figure}
 			\centering
-			\includegraphics[width=\linewidth]{images/dslab_overview}
+			{
+			\includegraphics<1>[width=\linewidth]{images/dslab_overview_1}			\includegraphics<2>[width=\linewidth]{images/dslab_overview_2}
+			\includegraphics<3>[width=\linewidth]{images/dslab_overview_3}
+			\includegraphics<4>[width=\linewidth]{images/dslab_overview_4}
+			\includegraphics<5>[width=\linewidth]{images/dslab_overview_5}
+			\includegraphics<6>[width=\linewidth]{images/dslab_overview_6}
+			}
 			\caption*{Внутреннее устройство \texttt{dslab-core}}
 		\end{figure}
 	\end{frame}
@@ -509,73 +504,7 @@ async fn process_data_transfer_request(
 	\end{figure}
  \end{frame}
 
-%  \subsection{\texttt{Ping-pong}. Сравнение кода}
 
-%  \begin{frame}[fragile]
-% 	\frametitle{\insertsection} 
-% 	\framesubtitle{\insertsubsection}
-% 	\begin{columns}
-% 		\begin{column}[t]{0.55\linewidth}
-% 			\vspace{-1cm}
-% 			\begin{figure}
-% 				\centering
-% 				\scriptsize
-% 				\begin{rustcode}
-% pub struct Process {
-%   iterations: u32,
-% }
-
-% fn on_start(&mut self) {
-%   let peer = /*random peer*/;
-%   self.send(Ping {}, peer);
-% }
-
-% fn on_ping(&mut self, from: Id) {
-%   self.send(Pong {}, from);
-% }       
-
-% fn on_pong(&mut self, from: Id) {
-%   self.iterations -= 1;
-%   if self.iterations > 0 {
-%     let peer = /*choose peer*/
-%     self.send(Ping {}, peer);
-%   }
-% }
-% 			\end{rustcode}
-% 			\vspace{-0.4cm}
-% 				\caption*{\texttt{ping-pong}}
-% 			\end{figure}
-% 		\end{column}
-% 		\begin{column}[t]{0.55\linewidth}
-% 			\vspace{-1cm}
-% 			\begin{figure}
-% 				\centering
-% 				\scriptsize
-% 				\begin{rustcode}
-% fn on_start(&self) {
-%   self.ctx.spawn(self.process());
-% }
-
-% fn on_ping(&mut self, from: Id) {
-%   self.send(Pong {}, from);
-% }  
-
-% async fn process(&self) {
-%   for _i in 0..self.iterations {
-%     let peer = /*choose peer*/;
-%     self.send(Ping {}, peer);
-
-%     // stop until receive Pong
-%     self.ctx.async_handle_event::<Pong>(peer).await;
-%   }
-% }
-% 			\end{rustcode}
-% 			\vspace{-0.2cm}
-% 				\caption*{\texttt{async-ping-pong}}
-% 			\end{figure}
-% 		\end{column}
-% 	\end{columns}
-%  \end{frame}
 
  \subsection{\texttt{Master-workers}. Производительность}
 
@@ -719,4 +648,98 @@ async fn process_task(&self, req: TaskRequest) {
 \Huge \textcolor{HSEblue}{\textbf{Вопросы}}
 
 \end{frame}
+
+
+\section{Приложения}
+
+ \subsection{\texttt{Ping-pong}. Сравнение кода}
+
+ \begin{frame}[fragile]
+	\frametitle{\insertsection} 
+	\framesubtitle{\insertsubsection}
+	\begin{columns}
+		\begin{column}[t]{0.55\linewidth}
+			\vspace{-1cm}
+			\begin{figure}
+				\centering
+				\scriptsize
+				\begin{rustcode}
+pub struct Process {
+  iterations: u32,
+}
+
+fn on_start(&mut self) {
+  let peer = /*random peer*/;
+  self.send(Ping {}, peer);
+}
+
+fn on_ping(&mut self, from: Id) {
+  self.send(Pong {}, from);
+}       
+
+fn on_pong(&mut self, from: Id) {
+  self.iterations -= 1;
+  if self.iterations > 0 {
+    let peer = /*choose peer*/
+    self.send(Ping {}, peer);
+  }
+}
+			\end{rustcode}
+			\vspace{-0.4cm}
+				\caption*{\texttt{ping-pong}}
+			\end{figure}
+		\end{column}
+		\begin{column}[t]{0.55\linewidth}
+			\vspace{-1cm}
+			\begin{figure}
+				\centering
+				\scriptsize
+				\begin{rustcode}
+fn on_start(&self) {
+  self.ctx.spawn(self.process());
+}
+
+fn on_ping(&mut self, from: Id) {
+  self.send(Pong {}, from);
+}  
+
+async fn process(&self) {
+  for _i in 0..self.iterations {
+    let peer = /*choose peer*/;
+    self.send(Ping {}, peer);
+
+    // stop until receive Pong
+    self.ctx.async_handle_event::<Pong>(peer).await;
+  }
+}
+			\end{rustcode}
+			\vspace{-0.2cm}
+				\caption*{\texttt{async-ping-pong}}
+			\end{figure}
+		\end{column}
+	\end{columns}
+ \end{frame}
+
+\subsection{Дискретно-событийное моделирование}
+\begin{frame}
+    \frametitle{\insertsection} 
+	\framesubtitle{\insertsubsection}
+
+	\begin{figure}
+		\centering
+		{
+		\includegraphics<1>[width=\linewidth]{images/event_pipeline_0}
+		\includegraphics<2>[width=\linewidth]{images/event_pipeline_1}
+		\includegraphics<3>[width=\linewidth]{images/event_pipeline_2}
+		\includegraphics<4>[width=\linewidth]{images/event_pipeline_3}
+		\includegraphics<5>[width=\linewidth]{images/event_pipeline_4}
+		\includegraphics<6>[width=\linewidth]{images/event_pipeline_5}
+		\includegraphics<7>[width=\linewidth]{images/event_pipeline_6}
+		\includegraphics<8>[width=\linewidth]{images/event_pipeline_7}
+		\includegraphics<9>[width=\linewidth]{images/event_pipeline_8}
+		\includegraphics<10>[width=\linewidth]{images/event_pipeline_9}
+		}
+		\caption*{Исполнение симуляции}
+	\end{figure}
+    \end{frame}
 \end{document}
