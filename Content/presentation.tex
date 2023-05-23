@@ -83,8 +83,9 @@
 \usepackage{color}
 
 
+
 \title{Реализация поддержки асинхронного программирования для фреймворка \texttt{DSLab}}
-\author{Артём Макогон}
+\author[Артём Макогон]{\footnotesize Выполнил: Макогон Артём Аркадьевич, БПМИ206 \\[5pt]   Руководитель: Сухорослов Олег Викторович, к.т.н, доцент НИУ ВШЭ}
 \date{\today}
 % \institute[Высшая школа экономики]{National Research University\\ 
 	% <<Higher School of Economics>>}
@@ -97,7 +98,6 @@
 		\maketitle
 	\end{frame}
 	
-
     \section{Введение}
     \subsection{Описание предметной области}
 
@@ -283,70 +283,7 @@ async fn collect_file_from_replicas(replicas) {
 		\end{figure}
 	\end{frame}
 
- \section{Управление исполнением}
-\subsection{\texttt{Stackless}-корутины}
- \begin{frame}[fragile]
-	\frametitle{\insertsection} 
-	\framesubtitle{\insertsubsection}
-	\vspace{-0.7cm}
-	\begin{columns}
-		\begin{column}[c]{0.40\linewidth}
-			\vspace{0.5cm}
-			\begin{figure}
-				\centering
-				\scriptsize
-				\begin{rustcode}
-fn on_start_action() {
-  // do 1
-}
 
-fn on_first_event() {
-  // do 2
-}
-
-fn on_second_event() {
-  // do 3
-}
-
-/* ... */
-
-on_start_action();
-			\end{rustcode}
-				\caption*{Синхронный код (разрезан на части разработчиком)}
-			\end{figure}
-		\end{column}
-		\begin{column}[c]{0.05\linewidth}
-			\vspace{-1cm}
-			$\iff$
-		\end{column}
-		\begin{column}[c]{0.55\linewidth}
-			\vspace{0.3cm}
-			\begin{figure}
-				\centering
-				\scriptsize
-				\begin{rustcode}
-async fn action() {
-  // do 1
-
-  wait_for_first_event().await;
-
-  // do 2 
-
-  wait_for_second_event().await;
-
-  // do 3
-}
-
-/* ... */
-
-let future = action();
-future.poll(/**/);
-			\end{rustcode}
-				\caption*{Асинхронный код (разрезан на части компилятором)}
-			\end{figure}
-		\end{column}
-	\end{columns}
- \end{frame}
 
  \section{Новое \texttt{API} для пользователей}
  \subsection{Расширение \texttt{SimulationContext}}
@@ -624,15 +561,19 @@ async fn process_task(&self, req: TaskRequest) {
 	\frametitle{\insertsection} 
 	\framesubtitle{\insertsubsection}
 
-	\vspace{-0.5cm}
+	\vspace{-0.7cm}
 	\begin{columns}
 		\begin{column}{1.1\linewidth}
 			\begin{itemize}
 				\item[\ding{51}] Реализовать эффективное асинхронное расширение для существующего ядра \texttt{dslab-core}.
 				\item[\ding{51}] Добавить примеры, написать документацию и тесты.
+				\item[\ding{51}] Реализовать примитив синхронизации:  \texttt{<\textless}блокирующая очередь\texttt{>\textgreater} для передачи произвольных данных. 
+				\item[\ding{51}] Сделать раздельную сборку ядра $\implies$ классическое ядро не теряет производительность.
+				\item[\ding{51}] Сформулировать будущее развитие проекта. 
 			\end{itemize}
 			\alt<2>{
-				\vspace{1cm}
+				\vspace{0.5cm}
+				\textbf{Главное достижение:} можно произвольно совмещать оба подхода:
 				\begin{itemize}
 				\item \texttt{Stateful}-процесс $\implies$ используем асинхронный подход.
 				\item \texttt{Stateless}-процесс $\implies$ используем модель \texttt{callback}-ов. 
@@ -642,17 +583,88 @@ async fn process_task(&self, req: TaskRequest) {
 	\end{columns}
 \end{frame}
 
-\begin{frame}{}
-	\centering
-	\vspace{3.5cm}
-\Huge \textcolor{HSEblue}{\textbf{Вопросы}}
+\section{Приложения}
 
+\begin{frame}{\textbf{Вопросы}}
+	
+	\begin{enumerate}
+		\item \hyperlink{execution}{\nameref{execution}}
+		\item \hyperlink{queue}{\nameref{queue}}
+		\item \hyperlink{ping-pong}{\nameref{ping-pong}}
+		\item \hyperlink{feature}{\nameref{feature}}
+		\item \hyperlink{future-plans}{\nameref{future-plans}}
+		\item \hyperlink{simgrid}{\nameref{simgrid}}
+		\item \hyperlink{dsmodeling}{\nameref{dsmodeling}}
+	\end{enumerate}
 \end{frame}
 
 
-\section{Приложения}
+\subsection{Execution. \texttt{Stackless}-корутины в \texttt{Rust}. Что такое \texttt{Task}?}\label{execution}
+ \begin{frame}[fragile]
+	\frametitle{\insertsection} 
+	\framesubtitle{\insertsubsection}
 
- \subsection{\texttt{Ping-pong}. Сравнение кода}
+	\vspace{-0.7cm}
+	\begin{columns}
+		\begin{column}[c]{0.40\linewidth}
+			\vspace{0.5cm}
+			\begin{figure}
+				\centering
+				\scriptsize
+				\begin{rustcode}
+fn on_start_action() {
+  // do 1
+}
+
+fn on_first_event() {
+  // do 2
+}
+
+fn on_second_event() {
+  // do 3
+}
+
+/* ... */
+
+on_start_action();
+			\end{rustcode}
+				\caption*{Синхронный код (разрезан на части разработчиком)}
+			\end{figure}
+		\end{column}
+		\begin{column}[c]{0.05\linewidth}
+			\vspace{-1cm}
+			$\iff$
+		\end{column}
+		\begin{column}[c]{0.55\linewidth}
+			\vspace{0.3cm}
+			\begin{figure}
+				\centering
+				\scriptsize
+				\begin{rustcode}
+async fn action() {
+  // do 1
+
+  wait_for_first_event().await;
+
+  // do 2 
+
+  wait_for_second_event().await;
+
+  // do 3
+}
+
+/* ... */
+
+let future = action();
+future.poll(/**/);
+			\end{rustcode}
+				\caption*{Асинхронный код (разрезан на части компилятором)}
+			\end{figure}
+		\end{column}
+	\end{columns}
+ \end{frame}
+
+ \subsection{\texttt{Ping-pong}. Сравнение кода.}\label{ping-pong}
 
  \begin{frame}[fragile]
 	\frametitle{\insertsection} 
@@ -720,7 +732,81 @@ async fn process(&self) {
 	\end{columns}
  \end{frame}
 
- \subsection{Сравнение с аналогами. \texttt{SimGrid}.}
+ \subsection{Примитив синхронизации \texttt{UnboundedBlockingQueue<T>}.}\label{queue}
+
+ \begin{frame}[fragile]
+	\frametitle{\insertsection} 
+	\framesubtitle{\insertsubsection}
+
+	\vspace{0cm}
+	\begin{columns}
+		\begin{column}{\linewidth}
+			\begin{figure}
+				\centering 
+				\scriptsize
+				\begin{rustcode}
+pub struct Worker {
+  task_chan: UnboundedBlockingQueue<TaskInfo>,
+}
+
+fn on_task_request(&self, task_info: TaskInfo) {
+  self.task_chan.send(task_info);
+}
+
+async fn work_loop(&self) {
+  loop {
+    let task_info = self.task_chan.receive().await;
+    /* process task */
+  }
+}
+				\end{rustcode}
+				\vspace{-0.2cm}
+				\caption*{Использование \texttt{UnboundedBlockingQueue<T>} как буфер для задач}
+			\end{figure}
+		\end{column}
+	\end{columns}
+
+ \end{frame}
+
+
+ \subsection{Раздельная сборка. Feature \texttt{async-core}.}\label{feature}
+ \begin{frame}[fragile]
+	\frametitle{\insertsection}
+	\framesubtitle{\insertsubsection}
+	\small
+
+	Пакет \texttt{dslab-core} можно подключить с разными опциями:
+	\begin{itemize}
+		\item \small \texttt{dslab-core = \{ path = "../dslab-core" \}} -- асинхронность не поддерживается. Максимальная производительность. 
+		\item \small \texttt{dslab-core = \{ path = "../dslab-core", features = ["async\_core"] \} } -- поддерживается весь асинхронный интерфейс. Скорость симуляции снижена.
+	\end{itemize}
+ \end{frame}
+
+ \subsection{Планы на будущее. Дальнейшее развитие проекта.}\label{future-plans}
+ \begin{frame}[fragile]
+	\frametitle{\insertsection}
+	\framesubtitle{\insertsubsection}
+
+\begin{itemize}
+	\setlength{\itemsep}{0.8em}
+	\item Повышение удобства синтаксиса.
+	\item Увеличение производительности симуляции.
+    \item Расширение асинхронной функциональности: 
+	\begin{itemize}
+		\setlength{\itemsep}{0.5em}
+		\item[\small\textgreater] \texttt{yield} -- уйти в конец очереди планировщика без продвижения по времени. 
+		\item[\small\textgreater] \texttt{Cancellation}. Возможность отменять задачи.  
+	\end{itemize}
+	\item Расширение  \texttt{<\textless}стандартных\texttt{>\textgreater} асинхронных инструментов:
+	\begin{itemize}
+		\setlength{\itemsep}{0.5em}
+		\item[\small\textgreater] Полноценный канал из \texttt{Go}
+		\item[\small\textgreater] \texttt{ConditionVariable?} 
+	\end{itemize}
+\end{itemize}
+ \end{frame}
+
+ \subsection{Сравнение с аналогами. \texttt{SimGrid}.}\label{simgrid}
 \begin{frame}[fragile]
 	\frametitle{\insertsection} 
 	\framesubtitle{\insertsubsection}
@@ -758,7 +844,7 @@ void Process(int id, Mailbox* in, vector<Mailbox*> peers,
 		\end{column}
 	\end{columns}
 \end{frame}
-\subsection{Дискретно-событийное моделирование}
+\subsection{Как устроено дискретно-событийное моделирование}\label{dsmodeling}
 \begin{frame}
     \frametitle{\insertsection} 
 	\framesubtitle{\insertsubsection}

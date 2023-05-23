@@ -14,6 +14,9 @@
 *.bcf
 *.xdv
 *.blg
+*.maf
+*.mtc
+*.mtc0
 *.run.xml
 *.toc
 *.lof
