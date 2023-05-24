@@ -297,27 +297,35 @@ async fn collect_file_from_replicas(replicas) {
 	\vspace{-0.5cm}
 	\begin{itemize}
 		\setlength{\itemsep}{0.7em} 
+		\alt<1->{
 		\item Запустить асинхронную задачу: 
 		\begin{itemize}
 			\item[\footnotesize\ding{58}]  \lstinline[language=Rust, basicstyle=\footnotesize\ttfamily]{fn spawn(&self, future: impl Future<Output = ()>)}
 		\end{itemize}
+		}{}
+		\alt<2->{
 		\item \texttt{<\textless}Заснуть\texttt{>\textgreater} на определенное время:
 			\begin{itemize}
 				\setlength{\itemsep}{0.5em} 
 				\item[\footnotesize\ding{58}]  \lstinline[language=Rust, basicstyle=\footnotesize\ttfamily]{async fn async_wait_for(&self, timeout: f64)}
 			\end{itemize}
+		}{}
+		\alt<3->{
 		\item Дождаться события с \texttt{<\textless}данными\texttt{>\textgreater} типа \texttt{T} от компонента \texttt{src}:
 			\begin{itemize}
 				\setlength{\itemsep}{0.5em} 
 				\item[\footnotesize\ding{58}] \lstinline[language=Rust,basicstyle=\footnotesize\ttfamily]{async fn async_handle_event<T>(src: Id) -> (Event, T)}
 				\item[\footnotesize\ding{58}] \lstinline[language=Rust,basicstyle=\footnotesize\ttfamily]{async fn async_wait_for_event<T>(src: Id, timeout: f64) -> AwaitResult<T>}
 			\end{itemize}
+		}{}
+		\alt<4->{
 		\item Дождаться события с \texttt{<\textless}данными\texttt{>\textgreater} \texttt{T}, деталями \texttt{details} от \texttt{src}:
 		\begin{itemize}
 			\setlength{\itemsep}{0.5em} 
 			\item[\footnotesize\ding{58}]\lstinline[language=Rust,basicstyle=\footnotesize\ttfamily]{async fn async_detailed_handle_event<T>(src: Id, details: u64) -> (Event, T)}
 			\item[\footnotesize\ding{58}]  \lstinline[language=Rust,basicstyle=\footnotesize\ttfamily]{async fn async_detailed_wait_for_event<T>(src: Id, details: u64, timeout: f64) -> AwaitResult<T>}
 		\end{itemize}
+		}{}
 	\end{itemize}
 \end{column}
 \end{columns}
